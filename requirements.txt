@@ -1,0 +1,5 @@
+discord.py==1.6.0
+feedparser==5.2.1
+async-timeout==3.0.1
+riotwatcher==3.1.1
+psycopg2-binary==2.8.6
