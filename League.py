@@ -130,7 +130,10 @@ def Get_Statistics(Summoner_Data):
     Summoner_Details = (lastmatch["participants"][ID_Participant - 1])
 
     # Summoner_Statistics = ["Kills", "Deaths", "Assists", "CS", "Win", "GameTime (s)", "GameMode"]
-    return [Summoner_Details["stats"]["kills"], Summoner_Details["stats"]["deaths"], Summoner_Details["stats"]["assists"], Summoner_Details["timeline"]["lane"], Summoner_Details["timeline"]["role"],Summoner_Details["stats"]["totalMinionsKilled"], Summoner_Details["stats"]["win"], lastmatch["gameDuration"], lastmatch["gameMode"]]
+
+    Winions = Summoner_Details["stats"]["totalMinionsKilled"] + Summoner_Details["stats"]["neutralMinionsKilled"]
+
+    return [Summoner_Details["stats"]["kills"], Summoner_Details["stats"]["deaths"], Summoner_Details["stats"]["assists"], Summoner_Details["timeline"]["lane"], Summoner_Details["timeline"]["role"], Winions, Summoner_Details["stats"]["win"], lastmatch["gameDuration"], lastmatch["gameMode"]]
 
 
 def Get_True_Role(Lane, Role):
