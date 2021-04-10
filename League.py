@@ -66,17 +66,18 @@ LOL_API = LolWatcher(League_Api_Key)
 # ---------------------------------------------------------
 
 
+
 # Get and print the summoner ranked stats
 def user_ranked_stats(Region, User):
     stats = LOL_API.league.by_summoner(Region, User["id"])
-    if len(stats) > 1:
-        #print(User["name"] + ": " + stats[1]["tier"], stats[1]["rank"])
-        return (stats[1]["tier"],stats[1]["rank"])
-    if len(stats) == 0:
-        stats = [{"tier": "UNRANKED", "rank": ""}]
-    #print(User["name"] + ": " + stats[0]["tier"], stats[0]["rank"])
+    for x in range(len(stats)):
+        if stats[x]["queueType"] == "RANKED_SOLO_5x5":
+            #print(User["Name"] + ": " + stats[x]["tier"], stats[x]["rank"])
+            return (stats[x]["tier"],stats[x]["rank"])
+    stats = [{"tier": "UNRANKED", "rank": ""}]
+    #print(User["Name"] + ": " + stats[0]["tier"], stats[0]["rank"])
     return (stats[0]["tier"],stats[0]["rank"])
-
+    
 # Get the summoner last match
 def user_last_match(Region, User):
     matches = LOL_API.match.matchlist_by_account(Region, User["accountId"])
@@ -93,7 +94,7 @@ def find_participantId(Summoner_Match, User):
 RankCalculator = {"I": 4, "II":3, "III":2, "IV":1, "":0,"IRON":10,"BRONZE":20, "SILVER":30,"GOLD":40,"PLATINUM":50,"DIAMOND":60,"MASTER":70,"GRANDMASTER":80,"CHALLENGER":90,"UNRANKED":0, None:0}
 
 def Calculate_Rank(rank_new,tier_new,rank_old,tier_old):
-    print("RANK_NEW: ",rank_new," TIER_NEW ", tier_new, " RANK_OLD: ", rank_old, " TIER_OLD: ", tier_old)
+    #print("RANK_NEW: ",rank_new," TIER_NEW ", tier_new, " RANK_OLD: ", rank_old, " TIER_OLD: ", tier_old)
     if ((RankCalculator[rank_new] + RankCalculator[tier_new]) - (RankCalculator[rank_old] + RankCalculator[tier_old]) == 0):
         return 0
     elif ((RankCalculator[rank_new] + RankCalculator[tier_new]) - (RankCalculator[rank_old] + RankCalculator[tier_old]) > 0):
@@ -204,10 +205,11 @@ def Final(Summoner):
 def Get_rank(Summoner):
     Summoner_Name = Summoner[0]
     User = DB.get_user(Summoner_Name)
-
+    
     # Print the user ranked stats
     User_Info = user_ranked_stats(EUROPE, User)
     fetched = DB.Update_database_rank(Summoner_Name,User_Info[0],User_Info[1])
+    
     if (fetched == False):
         return "NOT"
         

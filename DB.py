@@ -81,11 +81,12 @@ def Insert_Into_Database(summoner_name, matchid, discord_id, server_id):
         return True
     except  psycopg2.DatabaseError as error:
         print(error)
+        return False
         
 def get_user(Summoner_Name):
     try:
         cur = conn.cursor()
-        cur.execute("Select accountId, id from summoners WHERE summoner_name = %s", (Summoner_Name,))
+        cur.execute("Select accountId, id, summoner_name from summoners WHERE summoner_name = %s", (Summoner_Name,))
         ans = cur.fetchall()
         cur.close()
         if len(ans) == 0:
@@ -94,11 +95,13 @@ def get_user(Summoner_Name):
         conn.commit()
         dict = {
             "accountId": ans[0][0],
-            "id": ans[0][1]
+            "id": ans[0][1],
+            "Name": ans[0][2]
         }
         return dict
     except  psycopg2.DatabaseError as error:
         print(error)
+        return False
 
 
 # Atualizar colunas da tabela
@@ -110,6 +113,7 @@ def Update_database_lastmatch(summoner_name, lastmatch_id):
         conn.commit()
     except psycopg2.DatabaseError as error:
         print(error)
+        return False
 
 def Update_database_rank(summoner_name,rank,tier):
     try:
@@ -126,6 +130,7 @@ def Update_database_rank(summoner_name,rank,tier):
         return ans[0][0],ans[0][1]
     except psycopg2.DatabaseError as error:
         print(error)
+        return False
 
 # Remover colunas da tabela
 def Remove_From_Database(summoner_name):
