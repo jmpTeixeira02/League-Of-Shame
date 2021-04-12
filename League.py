@@ -162,7 +162,7 @@ def Calculate_Shame(Details):
     Duration = Details[7]
     Gamemode = Details[8]
 
-    if (Gamemode == "CLASSIC" or Gamemode == "ONEFORALL"):
+    if (Gamemode == "CLASSIC"):
         if Deaths == 0:
             Deaths = 1
 
