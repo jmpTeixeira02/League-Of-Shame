@@ -165,7 +165,9 @@ def Calculate_Shame(Details):
     if (Gamemode == "CLASSIC"):
         if Deaths == 0:
             Deaths = 1
-
+        #Remake
+        if (Duration <= 300):
+            return 0
         # If lose before 22min
         if (not Win_Status and Duration <= 1320):
             return 1
